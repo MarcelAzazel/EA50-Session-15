@@ -1,0 +1,30 @@
+from matplotlib import pyplot as plt
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('C:\Arquivos\Documentos\Courses\EA50\Coding\data.csv')
+
+greenland = 'Greenland mass (Gt)'
+antarctica = 'Antarctica mass (Gt)'
+years = 'TIME (year.decimal fraction)'
+
+
+total_anomaly = df[greenland] + df[antarctica]
+
+df['Total anomalies'] = total_anomaly
+
+recent_df = df[df[years] > 2011]
+
+cumulative_loss = []
+
+for i in range(len(recent_df[greenland])):
+    if i == 0:
+        cumulative_loss.append(recent_df.iloc[i, 3])
+    else: 
+        cumulative_loss.append(recent_df.iloc[i, 3] + cumulative_loss[i-1])
+
+plt.plot(recent_df[years], cumulative_loss)
+plt.xlabel('Years')
+plt.ylabel('Cummulative land ice loss (Gt)')
+plt.title('Cummulative land ice loss through recent years')
+plt.show()
